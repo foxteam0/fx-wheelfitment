@@ -59,7 +59,7 @@ function SyncWheelFitment()
            
 
             local plate = QBCore.Functions.GetPlate(plyVeh)
-            print("31-31-31")
+
             QBCore.Functions.TriggerCallback('fox-wheelfitment_sv:saveWheelfitment', function(result)
               
             end, plate, currentFitmentsToSet)
@@ -184,7 +184,7 @@ Citizen.CreateThread(function()
         name="fox-wheelfitment:zone1",
         offset={0.0, 0.0, 0.0},
         scale={1.0, 1.0, 1.0},
-        debugPoly=true,
+        debugPoly=false,
     })
 
     boxZone:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
@@ -292,7 +292,7 @@ Citizen.CreateThread(function()
                                     currentFitmentsToSet.rr = GetVehicleWheelXOffset(plyVeh, 3)
                                     currentFitmentsToSet.kf = GetVehicleWheelYRotation(plyVeh,0)
                                     currentFitmentsToSet.kr = GetVehicleWheelYRotation(plyVeh,2)
-                                    print(currentFitmentsToSet.kr)
+                                
                                     checkVehicleFitment()
         
                                     DisplayMenu(true, slider_wWidth, slider_wfFL, slider_wfFR, slider_wfRL, slider_wfRR,slider_KF ,slider_KR ,sliderStartPos)
@@ -317,22 +317,24 @@ Citizen.CreateThread(function()
             for _, vehData in ipairs(vehiclesToCheckFitment) do
              
                 if vehData.vehicle ~= nil and DoesEntityExist(vehData.vehicle) then
+                   
                     if GetVehicleWheelWidth(vehData.vehicle) ~=vehData.w_width then
-                        SetVehicleWheelWidth(vehData.vehicle, vehData.w_width)
+                      SetVehicleWheelWidth(vehData.vehicle, vehData.w_width)
                     end
                     if GetVehicleWheelXOffset(vehData.vehicle, 0) ~= vehData.w_fl then
-                        
+                       
                         SetVehicleWheelXOffset(vehData.vehicle, 0, vehData.w_fl)
                         SetVehicleWheelXOffset(vehData.vehicle, 1, vehData.w_fr)
                         SetVehicleWheelXOffset(vehData.vehicle, 2, vehData.w_rl)
                         SetVehicleWheelXOffset(vehData.vehicle, 3, vehData.w_rr)
-                        SetVehicleWheelYRotation(vehData.vehicle,0,vehData.w_kf)
-                        SetVehicleWheelYRotation(vehData.vehicle,1,math.abs(vehData.w_kf))
-                        SetVehicleWheelYRotation(vehData.vehicle,2,vehData.w_kr)
-                        SetVehicleWheelYRotation(vehData.vehicle,3,-vehData.w_kr)
                        
                       
                     end
+                    vehData.w_kf = math.abs(vehData.w_kf)
+                    SetVehicleWheelYRotation(vehData.vehicle,0,-vehData.w_kf)
+                    SetVehicleWheelYRotation(vehData.vehicle,1,vehData.w_kf)
+                    SetVehicleWheelYRotation(vehData.vehicle,2,vehData.w_kr)
+                    SetVehicleWheelYRotation(vehData.vehicle,3,-vehData.w_kr)
                   
 
                 end
@@ -342,7 +344,8 @@ Citizen.CreateThread(function()
             
                 local plyPed = PlayerPedId()
                 local plyVeh = GetVehiclePedIsIn(plyPed, false)
-                print(currentFitmentsToSet.kf)
+               
+               
                 SetVehicleWheelWidth(plyVeh, currentFitmentsToSet.width)
                 SetVehicleWheelXOffset(plyVeh, 0, currentFitmentsToSet.fl)
                 SetVehicleWheelXOffset(plyVeh, 1, currentFitmentsToSet.fr)
@@ -387,7 +390,8 @@ RegisterNetEvent("fox-wheelfitment_cl:applySavedWheelFitment")
 AddEventHandler("fox-wheelfitment_cl:applySavedWheelFitment", function(wheelFitments, plyVeh)
     performVehicleCheck = false
 
-
+    wheelFitments.kf = math.abs(wheelFitments.kf)
+    
     SetVehicleWheelWidth(plyVeh, wheelFitments.width)
     SetVehicleWheelXOffset(plyVeh, 0, wheelFitments.fl)
     SetVehicleWheelXOffset(plyVeh, 1, wheelFitments.fr)

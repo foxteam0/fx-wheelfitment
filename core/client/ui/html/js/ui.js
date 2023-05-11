@@ -3,7 +3,7 @@ window.onload = function(e)
     let menuStructure = {};
     let activeMenuIndex = 0;
     let maxMenuItems = 10;
-    let scriptName = "fx-kamber";
+    let scriptName = "fx-wheelfitment";
 
     function toggleMenu(state)
     {
