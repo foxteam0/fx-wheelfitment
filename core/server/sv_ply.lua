@@ -22,5 +22,3 @@ QBCore.Functions.CreateCallback('fox-wheelfitment_sv:saveWheelfitment', function
 end)
 
 
-
-
